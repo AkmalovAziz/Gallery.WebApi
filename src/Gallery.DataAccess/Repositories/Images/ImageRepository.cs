@@ -6,7 +6,7 @@ using Gallery.Domain.Entities.Images;
 
 namespace Gallery.DataAccess.Repositories.Images;
 
-public class ImageRepository : BaseRepository, IImageRepositoy
+public class ImageRepository : BaseRepository, IImageRepository
 {
     public async Task<long> CountAsync()
     {
