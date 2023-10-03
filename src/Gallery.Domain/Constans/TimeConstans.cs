@@ -1,6 +1,6 @@
 ﻿namespace Gallery.Domain.Constans;
 
-public class TimeContans
+public class TimeConstans
 {
     public const int UTC = 5;
 }
