@@ -59,7 +59,7 @@ public class UserRepository : BaseRepository, IUserRepository
         {
             await _connection.OpenAsync();
 
-            string query = "DELETE FROM users WHERE id = @Id;";
+            string query = "DELETE FROM users WHERE user_id = @Id;";
 
             var result = await _connection.ExecuteAsync(query, new { Id = id });
 
@@ -81,7 +81,7 @@ public class UserRepository : BaseRepository, IUserRepository
         {
             await _connection.OpenAsync();
 
-            string query = $"SELECT * FROM users ORDER BY id OFFSET {@params.SkipCount()} LIMIT {@params.PageSize};";
+            string query = $"SELECT * FROM users ORDER BY user_id OFFSET {@params.SkipCount()} LIMIT {@params.PageSize};";
 
             var result = (await _connection.QueryAsync<UserViewModel>(query)).ToList();
 
@@ -125,7 +125,7 @@ public class UserRepository : BaseRepository, IUserRepository
         {
             await _connection.OpenAsync();
 
-            string query = "SELECT * FROM users WHERE id = @Id;";
+            string query = "SELECT * FROM users WHERE user_id = @Id;";
 
             var result = await _connection.QuerySingleAsync<UserViewModel>(query, new { Id = id });
 
@@ -147,9 +147,9 @@ public class UserRepository : BaseRepository, IUserRepository
         {
             await _connection.OpenAsync();
 
-            string query = "SELECT * FROM users WHERE id = @Id;";
+            string query = "SELECT * FROM users WHERE user_id = @Id;";
 
-            var result = await _connection.QuerySingleAsync<User>(query, new { Id = id });
+            var result = await _connection.QuerySingleOrDefaultAsync<User>(query, new { Id = id });
 
             return result;
         }
@@ -192,7 +192,7 @@ public class UserRepository : BaseRepository, IUserRepository
             await _connection.OpenAsync();
 
             string query = $"UPDATE public.users SET first_name=@FirstName, last_name=@LastName, email=@Email, " +
-                $"description=@Description, created_at=@CreatedAt, updated_at=@UpdatedAt WHERE id = {id};";
+                $"description=@Description, created_at=@CreatedAt, updated_at=@UpdatedAt WHERE user_id = {id};";
 
             var result = await _connection.ExecuteAsync(query, entity);
 

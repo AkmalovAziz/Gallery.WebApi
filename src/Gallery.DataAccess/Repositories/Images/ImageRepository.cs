@@ -35,7 +35,7 @@ public class ImageRepository : BaseRepository, IImageRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO public.users(name, user_id, created_at, updated_at) " +
+            string query = "INSERT INTO public.images(name, user_id, created_at, updated_at) " +
                 "VALUES (@Name, @UserId, @CreatedAt, @UpdatedAt);";
 
             var result = await _connection.ExecuteAsync(query, entity);
@@ -58,7 +58,7 @@ public class ImageRepository : BaseRepository, IImageRepository
         {
             await _connection.OpenAsync();
 
-            string query = "DELETE FROM images WHERE id = @Id;";
+            string query = "DELETE FROM images WHERE id = @Id OR user_id = @Id;";
 
             var result = await _connection.ExecuteAsync(query, new { Id = id });
 
@@ -79,8 +79,8 @@ public class ImageRepository : BaseRepository, IImageRepository
         try
         {
             await _connection.OpenAsync();
-
-            string query = $"SELECT * FROM images ORDER BY id OFFSET {@params.SkipCount()} LIMIT {@params.PageSize};";
+            string query = $"SELECT * FROM images JOIN users ON images.user_id = users.user_id ORDER BY images.id " +
+                $"OFFSET {@params.SkipCount()} LIMIT {@params.PageSize};";
 
             var result = (await _connection.QueryAsync<ImageViewModel>(query)).ToList();
 
@@ -102,9 +102,31 @@ public class ImageRepository : BaseRepository, IImageRepository
         {
             await _connection.OpenAsync();
 
-            string query = "SELECT * FROM images WHERE id = @Id;";
+            string query = "SELECT * FROM images JOIN users ON images.user_id = users.user_id WHERE id = @Id;";
 
             var result = await _connection.QuerySingleAsync<ImageViewModel>(query, new { Id = id });
+
+            return result;
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
+    }
+
+    public async Task<Image?> GetIdAsync(long id)
+    {
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "SELECT * FROM images WHERE id = @Id;";
+
+            var result = await _connection.QuerySingleOrDefaultAsync<Image>(query, new { Id = id });
 
             return result;
         }
@@ -123,7 +145,7 @@ public class ImageRepository : BaseRepository, IImageRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "UPDATE public.users SET name=@Name, user_id=@UserId, created_at=@CreatedAt, updated_at=@UpdatedAt " +
+            string query = "UPDATE public.images SET name=@Name, user_id=@UserId, created_at=@CreatedAt, updated_at=@UpdatedAt " +
                 $"WHERE id = {id}";
 
             var result = await _connection.ExecuteAsync(query, entity);

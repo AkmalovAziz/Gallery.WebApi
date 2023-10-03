@@ -80,7 +80,7 @@ public class AuthService : IAuthService
                 TimeSpan.FromMinutes(CACHED_MINUTES_FOR_VERIFICATION));
 
             SmsMessage emailMessage = new SmsMessage();
-            emailMessage.Title = "Up Skills";
+            emailMessage.Title = "Virtual Gallery";
             emailMessage.Content = "Your verification code : " + verificationDto.Code;
             emailMessage.Resipient = email;
             var emailResult = await _emailSender.SendAsync(emailMessage);

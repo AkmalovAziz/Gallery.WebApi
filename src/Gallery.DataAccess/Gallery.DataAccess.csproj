@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.4" />
+    <PackageReference Include="Npgsql" Version="7.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gallery.Application\Gallery.Application.csproj" />
+  </ItemGroup>
+
 </Project>

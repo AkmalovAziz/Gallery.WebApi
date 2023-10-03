@@ -20,7 +20,7 @@ public class TokenService : ITokenService
     {
         var identityClaims = new Claim[]
         {
-            new Claim("Id", user.Id.ToString()),
+            new Claim("Id", user.UserId.ToString()),
             new Claim("FirstName", user.FirstName),
             new Claim("Lastname", user.LastName),
             new Claim(ClaimTypes.Email, user.Email),
